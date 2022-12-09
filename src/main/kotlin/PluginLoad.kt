@@ -1,0 +1,73 @@
+package org.example.mirai.plugin
+
+import net.mamoe.mirai.event.Event
+import net.mamoe.mirai.event.EventChannel
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.message.data.*
+import net.mamoe.mirai.message.data.Image.Key.queryUrl
+import org.example.mirai.plugin.message.ListProcess
+import org.example.mirai.plugin.message.MessageProcess
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+//@Slf4j
+class PluginLoad {
+
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
+
+    fun pluginLoad(eventChannel: EventChannel<Event>) {
+        log.info("Pluginloaded 加载成功")
+        val list = ArrayList<MessageProcess>();
+        val listProcess = ListProcess().listProcess()
+        //配置文件目录 "${dataFolder.absolutePath}/"
+//        val eventChannel = GlobalEventChannel.parentScope(this)
+        eventChannel.subscribeAlways<GroupMessageEvent> {
+            //群消息
+            val rawMessage = message.contentToString()
+            for (messageProcess in listProcess) {
+                if (messageProcess.isMatch(rawMessage)) {
+                    val process = messageProcess.process(rawMessage)
+                    val lightApp = LightApp(process.serializeToMiraiCode())
+                    if ("tip".equals(rawMessage))
+                        group.sendMessage(process)
+                    else
+                        group.sendMessage(lightApp)
+                }
+            }
+
+
+
+            if (message.contentToString().startsWith("复读")) {
+                group.sendMessage(message.contentToString().replaceFirst("复读", "复制ddd"))
+            }
+            if (message.contentToString() == "hi") {
+                group.bot.groups
+                //群内发送
+                group.sendMessage("hi")
+                //向发送者私聊发送消息
+                sender.sendMessage("hi")
+                //不继续处理
+                return@subscribeAlways
+            }
+            //分类示例
+            message.forEach {
+                //循环每个元素在消息里
+                if (it is Image) {
+                    //如果消息这一部分是图片
+                    val url = it.queryUrl()
+                    group.sendMessage("图片，下载地址$url")
+                }
+//                if (it is PlainText) {
+//                    //如果消息这一部分是纯文本
+//                    group.sendMessage("纯文本，内容:${it.content}")
+//                }
+            }
+
+
+        }
+
+
+    }
+
+
+}
