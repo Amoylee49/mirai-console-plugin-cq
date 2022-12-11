@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 @Slf4j
 public class CharacterCaches {
-    List<CharacterHolder> characters = new ArrayList<>();
+    private List<CharacterHolder> characters;
 
     public List<CharacterHolder> getAllCharacters() {
         return characters;

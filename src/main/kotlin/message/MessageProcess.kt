@@ -16,11 +16,9 @@ abstract class MessageProcess() {
     fun getCommandParameter(message: String): List<String> {
         val matcher = Pattern.compile(command, Pattern.CASE_INSENSITIVE)
             .matcher(message)
-        val trim = matcher.replaceFirst(command).trim()
-
+        val trim = matcher.replaceFirst("").trim()
         return trim.split(",")
     }
 
-
-    abstract fun process(message: String): MessageChain
+    abstract fun process(message: String): MessageChain?
 }
