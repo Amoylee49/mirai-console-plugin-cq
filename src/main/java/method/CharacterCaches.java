@@ -74,6 +74,7 @@ public class CharacterCaches {
             log.info("访问英雄类型页面：{}", url);
             document = Jsoup.connect(url).get();
         } catch (IOException e) {
+            log.info("访问英雄类型页面 失败？？？？？？？？？？");
             throw new RuntimeException(e);
         }
 
@@ -102,6 +103,7 @@ public class CharacterCaches {
             log.info("访问具体英雄页面：{}", url);
             document = Jsoup.connect(url).get();
         } catch (IOException e) {
+            log.info("访问英雄类型页面 失败？？？？？？？？？？processHeroPage");
             throw new RuntimeException(e);
         }
 

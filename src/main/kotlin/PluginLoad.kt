@@ -1,13 +1,9 @@
 package org.example.mirai.plugin
 
-import net.mamoe.mirai.console.util.ContactUtils.getContact
-import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.EventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
-import net.mamoe.mirai.message.data.Image.Key.queryUrl
-import net.mamoe.mirai.message.data.MessageChain.Companion.serializeToJsonString
 import org.example.mirai.plugin.message.ListProcess
 import org.example.mirai.plugin.message.MessageProcess
 import org.slf4j.Logger
@@ -29,44 +25,52 @@ class PluginLoad {
             val rawMessage = message.contentToString()
             for (messageProcess in listProcess) {
                 if (messageProcess.isMatch(rawMessage)) {
-                    val process = messageProcess.process(rawMessage)
-                    if (process != null) {
-                        val serializeToMiraiCode = process.serializeToMiraiCode()
-                        var lightApp = LightApp(process.serializeToJsonString())
-                        group.sendMessage(process)
-                        bot.getContact(group.id).sendMessage(lightApp)
-                    }
-                }
+                    val messChain = messageProcess.process(rawMessage)
+                    if (messChain != null) {
+//                        val imageUrl = messChain[0].contentToString()
+                        //② 先上传图片，获得 Image (报错，g)
+                        /* group.uploadImage(URL(imageUrl).openStream().toExternalResource()).also {
+                             // ② 和其他类型消息一起发送
+                             group.sendMessage(buildMessageChain {
+                                 val add = add(PlainText("plain"))
+                                 for (singleMess in messChain.drop(1)) { // i in [1, 10), 不包含 10
+                                     add(singleMess)
+                                 }
+                                 add(it)
+                             })*/
+                        // ② 直接发送
+                        group.sendMessage(messChain)
 
-                //不继续处理
-                return@subscribeAlways
-//                bot.getContact(sender.id).uploadImage()
-                /*if (message.contentToString().startsWith("复读")) {
-                    group.sendMessage(message.contentToString().replaceFirst("复读", "复制ddd"))
-                }
-                if (message.contentToString() == "hi") {
-                    group
-                    //群内发送
-                    group.sendMessage("hi")
-                    //向发送者私聊发送消息
-                    sender.sendMessage("hi")
-                    //不继续处理
-                    return@subscribeAlways
-                }
-                //分类示例
-                message.forEach {
-                    //循环每个元素在消息里
-                    if (it is Image) {
-                        //如果消息这一部分是图片
-                        val url = it.queryUrl()
-                        group.sendMessage("图片，下载地址$url")
                     }
-//                if (it is PlainText) {
-//                    //如果消息这一部分是纯文本
-//                    group.sendMessage("纯文本，内容:${it.content}")
-//                }
-                }*/
+                }
             }
+            //不继续处理
+            return@subscribeAlways
         }
+
+        /* 发送image参考：
+        //如何发送图片： https://github.com/mamoe/mirai/discussions/864
+         eventChannel.subscribeAlways<GroupMessageEvent> {
+             //① 将文件转为 ExternalResource，指定格式或不指定
+             group.sendImage(File("jpg_image_path").toExternalResource("jpg"))
+             //② 先上传图片，获得 Image
+             group.uploadImage(File("png_image_path").toExternalResource("png")).also {
+                 // ② 和其他类型消息一起发送
+                 group.sendMessage(buildMessageChain {
+                     add(PlainText("plain"))
+                     add(it)
+                 })
+                 // ② 直接发送
+                 group.sendMessage(it)
+             }
+             //直接传入 File 和 图片格式
+             group.sendImage(File("img_path"), "bmp")
+             //直接传入 InputStream 和 图片格式
+             group.sendImage(File("file").inputStream(), "gif")
+         }*/
+
+
     }
 }
+
+
