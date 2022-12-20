@@ -33,8 +33,8 @@ class HeroMessageProcess : MessageProcess() {
 //                        +share(character.pageUrl, character.name, character.content, character.imageUrl)
 //                    }
                     return buildMessageChain {
-//                        +character.imageUrl
-                        +PlainText(character.name)
+                        +PlainText(character.imageUrl)
+                        +PlainText("人物名称："+character.name)
                         +PlainText(character.pageUrl)
                     }
                 }

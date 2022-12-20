@@ -51,7 +51,7 @@ object PluginMain : KotlinPlugin(
 //        MySimpleCommand.register() // 注册指令
 
         val eventChannel = GlobalEventChannel.parentScope(this)
-        PluginLoad().pluginLoad(eventChannel)
+        PluginLoad().subEventChannel(eventChannel)
 
         eventChannel.subscribeAlways<FriendMessageEvent> {
             //好友信息

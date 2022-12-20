@@ -3,7 +3,7 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
-    id("net.mamoe.mirai-console") version "2.13.1"
+    id("net.mamoe.mirai-console") version "2.13.2"
 //    id("net.mamoe.mirai-logging-log4j") version "2.13.0-RC2"
 
 // Kotlin添加对lombok注解支持   https://kotlinlang.org/docs/lombok.html
@@ -30,6 +30,6 @@ dependencies {
     api(
         "net.mamoe",
         "mirai-logging-slf4j-logback",
-        "2.13.1"
+        "2.13.2"
     ) // 在依赖 mirai-core 或 mirai-core-api 的前提下额外添加日志转接模块. 版本号相同
 }

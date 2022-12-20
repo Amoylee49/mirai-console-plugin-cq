@@ -10,7 +10,7 @@ class TipMessageProcess : MessageProcess() {
     override fun process(message: String): MessageChain {
         val buildMessageChain = buildMessageChain {
             +PlainText(
-                "\"支持勇士，勇士登场期数参考表，特殊技能，精淬武器，戒指，服装，符文，女神，领主，活动日历等wiki查询。"
+                "\"支持勇士，勇士登场期数参考表，特殊技能，精淬武器，戒指，饰品，服装，符文，女神，领主，活动日历等wiki查询。"
                     +"请输入例如qr浦西或者查询浦西\" "
             )
         }
